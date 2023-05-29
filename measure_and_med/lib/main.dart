@@ -11,27 +11,128 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        title: 'Measure and Med',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a blue toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+          useMaterial3: true,
+        ),
+        home: const Scaffold(
+          body: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              LoginPage(),
+            ],
+          )),
+        ));
+  }
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String _errorMessage = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                ),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'Please enter your username';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                ),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              Text(
+                _errorMessage,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              const SizedBox(height: 32.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    // Perform login validation
+                    final String username = _usernameController.text;
+                    final String password = _passwordController.text;
+
+                    if (username == 'admin' && password == 'password') {
+                      // Successful login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyHomePage(title: 'Home'),
+                        ),
+                      );
+                    } else {
+                      setState(() {
+                        _errorMessage = 'Invalid username or password';
+                      });
+                    }
+                  }
+                },
+                child: const Text('Login'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
