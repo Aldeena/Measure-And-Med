@@ -1,0 +1,14 @@
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/measure_and_med.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/edit_cache.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/rebuild_cache.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/list_install_components.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/install.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/install/local.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/CMakeFiles/install/strip.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/flutter_assemble.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/edit_cache.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/rebuild_cache.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/list_install_components.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/install.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/install/local.dir
+/home/aldeena/Documents/UTFPR/SetimoSemestre/Measure_and_Med/build/flutter/CMakeFiles/install/strip.dir

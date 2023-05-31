@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "450242976413",
+    "project_id": "authentication-1fbe4",
+    "storage_bucket": "authentication-1fbe4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450242976413:android:81e2b6620fad716ee21274",
+        "android_client_info": {
+          "package_name": "com.example.measure_and_med"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK9k4-dJCIZTBilgYe2FTqDXFuRTTy0go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450242976413:android:128e00e14a83fe62e21274",
+        "android_client_info": {
+          "package_name": "measure.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK9k4-dJCIZTBilgYe2FTqDXFuRTTy0go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
