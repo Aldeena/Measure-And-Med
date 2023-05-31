@@ -1,8 +1,12 @@
+// ignore_for_file: unused_import
+
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:measure_and_med/Components/my_Button.dart';
 import 'package:measure_and_med/Components/my_TextField.dart';
-// ignore: unused_import
 import 'package:measure_and_med/Components/SquareTile.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,10 +20,13 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   //text Editing controllers
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   final confirmPasswordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
+  final ageController = TextEditingController();
 
   void signUserUp() async {
     //Circulo de carregamento aparece
@@ -40,6 +47,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           email: emailController.text,
           password: passwordController.text,
         );
+
+        //Adicionando detalhes do usuario
+        addUserDetails(
+            firstNameController.text,
+            lastNameController.text,
+            emailController.text,
+            int.parse(ageController.text),
+            int.parse(heightController.text),
+            double.parse(weightController.text));
       } else {
         //Senhas nao combinam
         showErrorMessage("Senhas são diferentes!");
@@ -53,6 +69,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       showErrorMessage(e.code);
     }
+  }
+
+  void addUserDetails(String firstName, String lastName, String email, int age,
+      int height, double weight) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'email': email,
+      'age': age,
+      'height': height,
+      'weight': weight
+    });
   }
 
   void showErrorMessage(String message) {
@@ -98,7 +126,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 10),
 
-                //username textfield
+                //First name textfield
+                MyTextField(
+                  controller: firstNameController,
+                  hintText: 'Primeiro nome',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                //Last name textfield
+                MyTextField(
+                  controller: lastNameController,
+                  hintText: 'Ultimo nome',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                //Age textfield
+                MyTextField(
+                  controller: ageController,
+                  hintText: 'Idade',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                //Height textfield
+                MyTextField(
+                  controller: heightController,
+                  hintText: 'Altura (cm)',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                //weight textfield
+                MyTextField(
+                  controller: weightController,
+                  hintText: 'Peso (kg)',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                //Email textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'E-mail',
