@@ -5,21 +5,23 @@ import 'package:measure_and_med/Components/my_TextField.dart';
 // ignore: unused_import
 import 'package:measure_and_med/Components/SquareTile.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   final Function()? onTap;
-  LoginScreen({super.key, required this.onTap});
+  RegisterScreen({super.key, required this.onTap});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   //text Editing controllers
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
-  void signUserIn() async {
+  final confirmPasswordController = TextEditingController();
+
+  void signUserUp() async {
     //Circulo de carregamento aparece
     showDialog(
       context: context,
@@ -30,12 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
 
-    //Logando usuario
+    //Criando usuario
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      //Checando se senha e confirma senha sao iguais
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        //Senhas nao combinam
+        showErrorMessage("Senhas são diferentes!");
+      }
 
       //Removendo circulo de carregamento
       Navigator.pop(context);
@@ -82,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //Seja bem-vindo
 
-                Text('Seja bem-vindo!',
+                Text('Crie uma conta!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -109,26 +117,36 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 10),
 
-                //forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Esqueceu a Senha?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
+                //confirm password textfield
+
+                MyTextField(
+                  controller: confirmPasswordController,
+                  hintText: 'Confirm Password',
+                  obscureText: true,
                 ),
 
                 const SizedBox(height: 10),
 
+                //forgot password?
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Text(
+                //         'Esqueceu a Senha?',
+                //         style: TextStyle(color: Colors.grey[600]),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+                // const SizedBox(height: 10),
+
                 //sign in button
                 MyButton(
-                  text: "Cadastre-se",
-                  onTap: signUserIn,
+                  text: "Registre-se",
+                  onTap: signUserUp,
                 ),
 
                 const SizedBox(height: 20),
@@ -137,14 +155,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Já possui conta?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Register now',
+                        'Conecte agora',
                         style: TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
