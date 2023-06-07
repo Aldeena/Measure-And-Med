@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:measure_and_med/Screens/AlarmScreen.dart';
+import 'package:measure_and_med/Screens/MeasurementScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -33,6 +34,15 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: Text("Alarmes"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MeasurementScreen()),
+                );
+              },
+              child: Text("Medições"),
             )
           ],
         ),

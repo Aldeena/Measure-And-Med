@@ -39,6 +39,8 @@ dependencies:
   firebase_core: ^2.13.1
   cloud_firestore: ^4.8.0
   flutter_alarm_clock: ^0.0.2
+  http: ^1.0.0
+  json_annotation: ^4.8.1
   
 dev_dependencies:
   flutter_test:
