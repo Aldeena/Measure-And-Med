@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: Colors.greenAccent,
           title: Center(child: Text('Measure & Med - Home Page')),
+          centerTitle: true,
           actions: [
             IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
           ]),

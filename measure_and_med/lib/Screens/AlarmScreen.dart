@@ -18,7 +18,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Measure & Med'),
+        backgroundColor: Colors.greenAccent,
+        title: const Text('Measure & Med - Alarmes'),
         centerTitle: true,
       ),
       body: Center(

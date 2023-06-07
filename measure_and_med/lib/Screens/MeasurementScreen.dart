@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MeasurementScreen extends StatefulWidget {
   MeasurementScreen({Key? key}) : super(key: key);
@@ -36,11 +38,55 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     }
   }
 
+  Future<void> updateVitalsCollection(Entry entry) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final firstName = user.displayName!.split(" ")[0];
+      final lastName = user.displayName!.split(" ")[1];
+
+      final collectionRef = FirebaseFirestore.instance.collection('vitals');
+
+      // Check if a document with the same createdAt value already exists
+      final querySnapshot = await collectionRef
+          .where('createdAt', isEqualTo: entry.createdAt)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        print('Vitals already exist for this createdAt: ${entry.createdAt}');
+        return;
+      }
+
+      final measurement = Measurement(
+        createdAt: entry.createdAt,
+        temperature: entry.field1,
+        firstName: firstName,
+        lastName: lastName,
+      );
+
+      await collectionRef.add(measurement.toJson());
+      print('Vitals updated successfully!');
+    } catch (e) {
+      print('Failed to update vitals: $e');
+    }
+  }
+
+  Future<void> submitData() async {
+    final entries = await fetchData();
+    for (final entry in entries) {
+      await updateVitalsCollection(entry);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Measurement Screen'),
+        backgroundColor: Colors.greenAccent,
+        title: Text('Measure & Med - Medições'),
+        centerTitle: true,
       ),
       body: Center(
         child: FutureBuilder<List<Entry>>(
@@ -72,6 +118,10 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: submitData,
+        child: Icon(Icons.cloud_upload),
+      ),
     );
   }
 }
@@ -86,4 +136,27 @@ class Entry {
     required this.entryId,
     required this.field1,
   });
+}
+
+class Measurement {
+  final String createdAt;
+  final String temperature;
+  final String firstName;
+  final String lastName;
+
+  Measurement({
+    required this.createdAt,
+    required this.temperature,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'createdAt': createdAt,
+      'temperature': temperature,
+      'firstName': firstName,
+      'lastName': lastName,
+    };
+  }
 }
