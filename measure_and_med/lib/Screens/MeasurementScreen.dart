@@ -45,10 +45,18 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
         throw Exception('User not authenticated');
       }
 
-      final firstName = user.displayName!.split(" ")[0];
-      final lastName = user.displayName!.split(" ")[1];
-
       final collectionRef = FirebaseFirestore.instance.collection('vitals');
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (!userDoc.exists) {
+        throw Exception('User document does not exist');
+      }
+
+      final firstName = userDoc.data()!['firstName'] as String? ?? '';
+      final lastName = userDoc.data()!['lastName'] as String? ?? '';
 
       // Check if a document with the same createdAt value already exists
       final querySnapshot = await collectionRef
