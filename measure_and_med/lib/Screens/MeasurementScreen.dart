@@ -1,8 +1,11 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'GraphScreen.dart'; // Import the GraphScreen file
 
 class MeasurementScreen extends StatefulWidget {
   MeasurementScreen({Key? key}) : super(key: key);
@@ -45,36 +48,36 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
         throw Exception('User not authenticated');
       }
 
+      final email = user.email;
+
       final collectionRef = FirebaseFirestore.instance.collection('vitals');
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      if (!userDoc.exists) {
-        throw Exception('User document does not exist');
-      }
-
-      final firstName = userDoc.data()!['firstName'] as String? ?? '';
-      final lastName = userDoc.data()!['lastName'] as String? ?? '';
 
       // Check if a document with the same createdAt value already exists
       final querySnapshot = await collectionRef
           .where('createdAt', isEqualTo: entry.createdAt)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
-        print('Vitals already exist for this createdAt: ${entry.createdAt}');
+        if (querySnapshot.docs[0].data()['email'] == email) {
+          // Overwrite existing entry with the same createdAt if email matches
+          await collectionRef.doc(querySnapshot.docs[0].id).set({
+            'createdAt': entry.createdAt,
+            'Temperature': entry.field1,
+            'email': email,
+          });
+          print('Vitals updated successfully!');
+        } else {
+          print('Vitals exist for this createdAt, email does not match');
+        }
         return;
       }
 
       final measurement = Measurement(
         createdAt: entry.createdAt,
         temperature: entry.field1,
-        firstName: firstName,
-        lastName: lastName,
+        email: email!,
       );
 
-      await collectionRef.add(measurement.toJson());
+      await collectionRef.add(measurement.toMap());
       print('Vitals updated successfully!');
     } catch (e) {
       print('Failed to update vitals: $e');
@@ -88,6 +91,13 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     }
   }
 
+  // Future<void> launchGraphScreen() async {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => GraphScreen()),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +105,12 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
         backgroundColor: Colors.greenAccent,
         title: Text('Measure & Med - Medições'),
         centerTitle: true,
+        actions: [
+          // IconButton(
+          //   icon: Icon(Icons.insert_chart),
+          //   onPressed: launchGraphScreen,
+          // ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<List<Entry>>(
@@ -149,22 +165,19 @@ class Entry {
 class Measurement {
   final String createdAt;
   final String temperature;
-  final String firstName;
-  final String lastName;
+  final String email;
 
   Measurement({
     required this.createdAt,
     required this.temperature,
-    required this.firstName,
-    required this.lastName,
+    required this.email,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'createdAt': createdAt,
-      'temperature': temperature,
-      'firstName': firstName,
-      'lastName': lastName,
+      'Temperature': temperature,
+      'email': email,
     };
   }
 }

@@ -41,6 +41,11 @@ dependencies:
   flutter_alarm_clock: ^0.0.2
   http: ^1.0.0
   json_annotation: ^4.8.1
+  url_launcher: ^6.0.9
+  flutter_charts: ^0.5.1
+  # flutter_blue: ^0.8.0
+  flutter_bluetooth_serial: ^0.4.0
+  scoped_model: ^2.0.0
   
 dev_dependencies:
   flutter_test:

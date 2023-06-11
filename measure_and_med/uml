@@ -1,0 +1,137 @@
+classDiagram
+class HomeScreen
+HomeScreen : +user User
+HomeScreen o-- User
+HomeScreen : +signUserOut() void
+HomeScreen : +build() Widget
+StatelessWidget <|-- HomeScreen
+
+class AlarmScreen
+AlarmScreen : +createState() State<AlarmScreen>
+StatefulWidget <|-- AlarmScreen
+
+class _AlarmScreenState
+_AlarmScreenState : +hourController TextEditingController
+_AlarmScreenState o-- TextEditingController
+_AlarmScreenState : +minuteController TextEditingController
+_AlarmScreenState o-- TextEditingController
+_AlarmScreenState : +build() Widget
+State <|-- _AlarmScreenState
+
+class AuthScreen
+AuthScreen : +build() Widget
+StatelessWidget <|-- AuthScreen
+
+class RegisterScreen
+RegisterScreen : +onTap dynamic Function?
+RegisterScreen o-- dynamic Function
+RegisterScreen : +createState() State<RegisterScreen>
+StatefulWidget <|-- RegisterScreen
+
+class _RegisterScreenState
+_RegisterScreenState : +emailController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +passwordController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +confirmPasswordController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +firstNameController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +lastNameController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +heightController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +weightController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +ageController TextEditingController
+_RegisterScreenState o-- TextEditingController
+_RegisterScreenState : +signUserUp() void
+_RegisterScreenState : +addUserDetails() void
+_RegisterScreenState : +showErrorMessage() void
+_RegisterScreenState : +build() Widget
+State <|-- _RegisterScreenState
+
+class LoginScreen
+LoginScreen : +onTap dynamic Function?
+LoginScreen o-- dynamic Function
+LoginScreen : +createState() State<LoginScreen>
+StatefulWidget <|-- LoginScreen
+
+class _LoginScreenState
+_LoginScreenState : +emailController TextEditingController
+_LoginScreenState o-- TextEditingController
+_LoginScreenState : +passwordController TextEditingController
+_LoginScreenState o-- TextEditingController
+_LoginScreenState : +signUserIn() void
+_LoginScreenState : +showErrorMessage() void
+_LoginScreenState : +build() Widget
+State <|-- _LoginScreenState
+
+class MeasurementScreen
+MeasurementScreen : +createState() _MeasurementScreenState
+StatefulWidget <|-- MeasurementScreen
+
+class _MeasurementScreenState
+_MeasurementScreenState : +entries List~Entry~
+_MeasurementScreenState : +fetchData() dynamic
+_MeasurementScreenState : +updateVitalsCollection() dynamic
+_MeasurementScreenState : +submitData() dynamic
+_MeasurementScreenState : +build() Widget
+State <|-- _MeasurementScreenState
+
+class Entry
+Entry : +createdAt String
+Entry : +entryId String
+Entry : +field1 String
+
+class Measurement
+Measurement : +createdAt String
+Measurement : +temperature String
+Measurement : +firstName String
+Measurement : +lastName String
+Measurement : +toJson() Map<String, dynamic>
+
+class LoginOrRegisterScreen
+LoginOrRegisterScreen : +createState() State<LoginOrRegisterScreen>
+StatefulWidget <|-- LoginOrRegisterScreen
+
+class _LoginOrRegisterScreenState
+_LoginOrRegisterScreenState : +showLoginScreen bool
+_LoginOrRegisterScreenState : +toogleScreens() void
+_LoginOrRegisterScreenState : +build() Widget
+State <|-- _LoginOrRegisterScreenState
+
+class MyApp
+MyApp : +build() Widget
+StatelessWidget <|-- MyApp
+
+class MyButton
+MyButton : +onTap dynamic Function?
+MyButton o-- dynamic Function
+MyButton : +text String
+MyButton : +build() Widget
+StatelessWidget <|-- MyButton
+
+class MyTextField
+MyTextField : +controller dynamic
+MyTextField : +hintText String
+MyTextField : +obscureText bool
+MyTextField : +build() Widget
+StatelessWidget <|-- MyTextField
+
+class SquareTile
+SquareTile : +imagePath String
+SquareTile : +build() Widget
+StatelessWidget <|-- SquareTile
+
+class DefaultFirebaseOptions
+DefaultFirebaseOptions : +web$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +android$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +ios$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +macos$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +currentPlatform$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
