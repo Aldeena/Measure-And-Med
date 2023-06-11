@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -21,7 +20,7 @@ class AlarmScreen extends StatefulWidget {
 
 class _AlarmScreenState extends State<AlarmScreen> {
   final WifiModel _wifiModel = WifiModel();
-  String _ipAddress = '192.168.1.100'; // Replace with your ESP32's IP address
+  String _ipAddress = '192.168.18.19'; // Replace with your ESP32's IP address
 
   void _connectToESP32() async {
     try {
@@ -36,8 +35,15 @@ class _AlarmScreenState extends State<AlarmScreen> {
     try {
       final socket = _wifiModel.socket;
       if (socket != null) {
-        String data = 'Test data';
+        String data = 'test\n';
         socket.write(data);
+
+        // Read response from the ESP32
+        socket.listen((data) {
+          String response = String.fromCharCodes(data).trim();
+          print('Received response from ESP32: $response');
+          // Handle the response as needed
+        });
       }
     } catch (e) {
       print('Error sending data to ESP32: $e');
