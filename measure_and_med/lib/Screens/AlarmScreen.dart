@@ -1,14 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class BluetoothModel extends Model {
-  BluetoothConnection? _connection;
+class WifiModel extends Model {
+  Socket? _socket;
 
-  BluetoothConnection? get connection => _connection;
+  Socket? get socket => _socket;
 
-  void setConnection(BluetoothConnection connection) {
-    _connection = connection;
+  void setSocket(Socket socket) {
+    _socket = socket;
     notifyListeners();
   }
 }
@@ -19,31 +20,27 @@ class AlarmScreen extends StatefulWidget {
 }
 
 class _AlarmScreenState extends State<AlarmScreen> {
-  final BluetoothModel _bluetoothModel = BluetoothModel();
-  List<BluetoothDevice> _devicesList = [];
-  BluetoothDevice? _selectedDevice;
+  final WifiModel _wifiModel = WifiModel();
+  String _ipAddress = '192.168.1.100'; // Replace with your ESP32's IP address
 
-  @override
-  void initState() {
-    super.initState();
-    _getBluetoothDevices();
-  }
-
-  void _getBluetoothDevices() async {
-    List<BluetoothDevice> devices =
-        await FlutterBluetoothSerial.instance.getBondedDevices();
-    setState(() {
-      _devicesList = devices;
-    });
-  }
-
-  void _connectToDevice(BluetoothDevice device) async {
+  void _connectToESP32() async {
     try {
-      BluetoothConnection connection =
-          await BluetoothConnection.toAddress(device.address);
-      _bluetoothModel.setConnection(connection);
+      Socket socket = await Socket.connect(_ipAddress, 80);
+      _wifiModel.setSocket(socket);
     } catch (e) {
-      print('Error connecting to device: $e');
+      print('Error connecting to ESP32: $e');
+    }
+  }
+
+  void _sendDataToESP32() async {
+    try {
+      final socket = _wifiModel.socket;
+      if (socket != null) {
+        String data = 'Test data';
+        socket.write(data);
+      }
+    } catch (e) {
+      print('Error sending data to ESP32: $e');
     }
   }
 
@@ -54,25 +51,25 @@ class _AlarmScreenState extends State<AlarmScreen> {
         title: const Text('Measure & Med - Alarmes'),
         centerTitle: true,
       ),
-      body: ScopedModel<BluetoothModel>(
-        model: _bluetoothModel,
-        child: ListView.builder(
-          itemCount: _devicesList.length,
-          itemBuilder: (context, index) {
-            BluetoothDevice device = _devicesList[index];
-            return ListTile(
-              title: Text(device.name ?? 'Unknown Device'),
-              subtitle: Text(device.address),
-              onTap: () {
-                setState(() {
-                  _selectedDevice = device;
-                });
-                _connectToDevice(device);
-              },
-              selected: device == _selectedDevice,
-            );
-          },
+      body: ScopedModel<WifiModel>(
+        model: _wifiModel,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('ESP32 Connection Status'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _connectToESP32,
+                child: Text('Connect to ESP32'),
+              ),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _sendDataToESP32,
+        child: Icon(Icons.send),
       ),
     );
   }
