@@ -1,55 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 
-class WifiModel extends Model {
-  Socket? _socket;
+import 'package:measure_and_med/Screens/SetOrShowAlarmScreen.dart';
 
-  Socket? get socket => _socket;
+import 'package:measure_and_med/Screens/ConnectScreen.dart';
 
-  void setSocket(Socket socket) {
-    _socket = socket;
-    notifyListeners();
-  }
-}
-
-class AlarmScreen extends StatefulWidget {
-  @override
-  _AlarmScreenState createState() => _AlarmScreenState();
-}
-
-class _AlarmScreenState extends State<AlarmScreen> {
-  final WifiModel _wifiModel = WifiModel();
-  String _ipAddress = '192.168.18.19'; // Replace with your ESP32's IP address
-
-  void _connectToESP32() async {
-    try {
-      Socket socket = await Socket.connect(_ipAddress, 80);
-      _wifiModel.setSocket(socket);
-    } catch (e) {
-      print('Error connecting to ESP32: $e');
-    }
-  }
-
-  void _sendDataToESP32() async {
-    try {
-      final socket = _wifiModel.socket;
-      if (socket != null) {
-        String data = 'test\n';
-        socket.write(data);
-
-        // Read response from the ESP32
-        socket.listen((data) {
-          String response = String.fromCharCodes(data).trim();
-          print('Received response from ESP32: $response');
-          // Handle the response as needed
-        });
-      }
-    } catch (e) {
-      print('Error sending data to ESP32: $e');
-    }
-  }
-
+class AlarmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,25 +12,34 @@ class _AlarmScreenState extends State<AlarmScreen> {
         title: const Text('Measure & Med - Alarmes'),
         centerTitle: true,
       ),
-      body: ScopedModel<WifiModel>(
-        model: _wifiModel,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('ESP32 Connection Status'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _connectToESP32,
-                child: Text('Connect to ESP32'),
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConnectScreen(),
+                  ),
+                );
+              },
+              child: Text('Connection'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SetOrShowAlarmScreen(),
+                  ),
+                );
+              },
+              child: Text('Configure Alarms'),
+            ),
+          ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _sendDataToESP32,
-        child: Icon(Icons.send),
       ),
     );
   }
