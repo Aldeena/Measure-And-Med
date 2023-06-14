@@ -10,8 +10,10 @@ class SetAlarmScreen extends StatefulWidget {
 }
 
 class _SetAlarmScreenState extends State<SetAlarmScreen> {
-  TimeOfDay _selectedTime = TimeOfDay.now();
+  TextEditingController _hoursController = TextEditingController();
+  TextEditingController _minutesController = TextEditingController();
   int _selectedFrequency = 0;
+  int _selectedStorage = 0;
 
   void _sendDataToDevice() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -21,21 +23,27 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
       final selectedFrequency = _selectedFrequency + 1;
       final alarmsCollection = FirebaseFirestore.instance.collection('alarms');
 
+      final int hours = int.tryParse(_hoursController.text) ?? 0;
+      final int minutes = int.tryParse(_minutesController.text) ?? 0;
+
       for (int i = 0; i < selectedFrequency; i++) {
         final newAlarm = Alarm(
-          hours: _selectedTime.hour,
-          minutes: _selectedTime.minute,
+          hours: hours,
+          minutes: minutes,
           frequency: selectedFrequency,
         );
 
         newAlarm.setNextAlarmTimes();
         final alarmTime = newAlarm.nextAlarmTimes[i];
 
+        final formattedHour = alarmTime.hour.toString().padLeft(2, '0');
+        final formattedMinute = alarmTime.minute.toString().padLeft(2, '0');
+
         await alarmsCollection.add({
-          'hours': alarmTime.hour,
-          'minutes': alarmTime.minute,
+          'hours': formattedHour,
+          'minutes': formattedMinute,
           'frequency': newAlarm.frequency,
-          'nextAlarmTime': alarmTime.toIso8601String(),
+          'storage': _selectedStorage + 1, // Add the selected storage value
           'email': email,
         });
       }
@@ -52,6 +60,13 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
   }
 
   @override
+  void dispose() {
+    _hoursController.dispose();
+    _minutesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -62,29 +77,31 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Set Alarm'),
+            Text('Set Alarm : 24 hour format (HH:MM)'),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Time: '),
+                Text('Hours: '),
                 SizedBox(
                   width: 100,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: _selectedTime,
-                      );
-                      if (pickedTime != null) {
-                        setState(() {
-                          _selectedTime = pickedTime;
-                        });
-                      }
-                    },
-                    child: Text(
-                      _selectedTime.format(context),
-                    ),
+                  child: TextField(
+                    controller: _hoursController,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Minutes: '),
+                SizedBox(
+                  width: 100,
+                  child: TextField(
+                    controller: _minutesController,
+                    keyboardType: TextInputType.number,
                   ),
                 ),
               ],
@@ -105,6 +122,24 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
               onPressed: (index) {
                 setState(() {
                   _selectedFrequency = index;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            Text('Storage:'),
+            ToggleButtons(
+              children: [
+                Text('Storage 1'),
+                Text('Storage 2'),
+                Text('Storage 3'),
+              ],
+              isSelected: List.generate(
+                3,
+                (index) => _selectedStorage == index,
+              ),
+              onPressed: (index) {
+                setState(() {
+                  _selectedStorage = index;
                 });
               },
             ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:measure_and_med/Screens/NewMeasurementScreen.dart';
 
 import 'package:measure_and_med/Screens/SetOrShowAlarmScreen.dart';
-
-import 'package:measure_and_med/Screens/ConnectScreen.dart';
 
 class AlarmScreen extends StatelessWidget {
   @override
@@ -21,11 +20,11 @@ class AlarmScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ConnectScreen(),
+                    builder: (context) => NewMeasurementScreen(),
                   ),
                 );
               },
-              child: Text('Connection'),
+              child: Text('Nova Medição'),
             ),
             ElevatedButton(
               onPressed: () {
