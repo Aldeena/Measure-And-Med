@@ -1,11 +1,9 @@
-// ignore_for_file: unused_import
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'GraphScreen.dart'; // Import the GraphScreen file
+import 'package:intl/intl.dart'; // Import the intl package
 
 class MeasurementScreen extends StatefulWidget {
   MeasurementScreen({Key? key}) : super(key: key);
@@ -63,6 +61,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
           // Overwrite existing entry with the same createdAt if email matches
           await collectionRef.doc(querySnapshot.docs[0].id).set({
             'createdAt': entry.createdAt,
+            'date': entry.date,
+            'time': entry.time,
             'Temperature': entry.field1,
             'BPM': entry.field2,
             'SpO2': entry.field3,
@@ -77,6 +77,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
 
       final measurement = Measurement(
         createdAt: entry.createdAt,
+        date: entry.date,
+        time: entry.time,
         temperature: entry.field1,
         bpm: entry.field2,
         spo2: entry.field3,
@@ -97,13 +99,6 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     }
   }
 
-  // Future<void> launchGraphScreen() async {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => GraphScreen()),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,12 +106,6 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
         backgroundColor: Colors.greenAccent,
         title: Text('Measure & Med - Measurements'),
         centerTitle: true,
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.insert_chart),
-          //   onPressed: launchGraphScreen,
-          // ),
-        ],
       ),
       body: Center(
         child: FutureBuilder<List<Entry>>(
@@ -128,12 +117,17 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                 itemCount: entries.length,
                 itemBuilder: (context, index) {
                   final entry = entries[index];
+                  final dateTime = DateTime.parse(entry.createdAt);
+                  final localTime = DateFormat.yMd()
+                      .add_jms()
+                      .format(dateTime.toLocal()); // Format the local time
+
                   return ListTile(
-                    title: Text('Entry ID: ${entry.entryId}'),
+                    title: Text('Measurement: ${entry.entryId}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Created At: ${entry.createdAt}'),
+                        Text('Created At: $localTime'),
                         Text('Temperature(ºC): ${entry.field1}'),
                         Text('BPM: ${entry.field2}'),
                         Text('SpO2(%): ${entry.field3}'),
@@ -164,6 +158,8 @@ class Entry {
   final String field1;
   final String field2;
   final String field3;
+  late final String date;
+  late final String time;
 
   Entry({
     required this.createdAt,
@@ -171,11 +167,17 @@ class Entry {
     required this.field1,
     required this.field2,
     required this.field3,
-  });
+  }) {
+    final dateTime = DateTime.parse(createdAt);
+    date = dateTime.toIso8601String().split('T')[0];
+    time = '${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+  }
 }
 
 class Measurement {
   final String createdAt;
+  final String date;
+  final String time;
   final String temperature;
   final String bpm;
   final String spo2;
@@ -183,6 +185,8 @@ class Measurement {
 
   Measurement({
     required this.createdAt,
+    required this.date,
+    required this.time,
     required this.temperature,
     required this.bpm,
     required this.spo2,
@@ -192,6 +196,8 @@ class Measurement {
   Map<String, dynamic> toMap() {
     return {
       'createdAt': createdAt,
+      'date': date,
+      'time': time,
       'Temperature': temperature,
       'BPM': bpm,
       'SpO2': spo2,
