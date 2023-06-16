@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:measure_and_med/Screens/AlarmScreen.dart';
+import 'package:measure_and_med/Screens/DeviceScreen.dart';
 import 'package:measure_and_med/Screens/MeasurementScreen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -26,15 +26,15 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Conta Conectada como: " + user.email!),
+            Text("User connected as: " + user.email!),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AlarmScreen()),
+                  MaterialPageRoute(builder: (context) => DeviceScreen()),
                 );
               },
-              child: Text("Alarmes"),
+              child: Text("Device"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => MeasurementScreen()),
                 );
               },
-              child: Text("Medições"),
+              child: Text("Measurements"),
             )
           ],
         ),

@@ -29,11 +29,12 @@ class _ShowAlarmScreenState extends State<ShowAlarmScreen> {
 
       final fetchedAlarms = snapshot.docs.map((doc) {
         final data = doc.data();
+        print(data); // Add this line to check the fetched data
         return {
-          'docId': doc.id, // Add the document ID
+          'docId': doc.id,
+          'medicine': data['medicine'], // Add the medicine field
           'hours': data['hours'],
           'minutes': data['minutes'],
-          'frequency': data['frequency'],
           'storage': data['storage'],
         };
       }).toList();
@@ -52,7 +53,7 @@ class _ShowAlarmScreenState extends State<ShowAlarmScreen> {
     if (email != null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Show Alarms'),
+          title: Text('Measure & Med - Show Alarms'),
           backgroundColor: Colors.greenAccent,
         ),
         body: alarms != null
@@ -62,15 +63,21 @@ class _ShowAlarmScreenState extends State<ShowAlarmScreen> {
                     itemBuilder: (context, index) {
                       final alarm = alarms![index];
                       return ListTile(
-                        title:
+                        title: Text(
+                          '${alarm['medicine']}',
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text('Time: ${alarm['hours']}:${alarm['minutes']}'),
-                        subtitle:
-                            Text('Frequency: ${alarm['frequency']}x a day'),
+                            Text(
+                                'Storage: ${alarm['storage']}'), // Add the storage field subtitle
+                          ],
+                        ),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            _deleteAlarm(
-                                alarm['docId']); // Pass the document ID
+                            _deleteAlarm(alarm['docId']);
                           },
                         ),
                       );
@@ -95,8 +102,9 @@ class _ShowAlarmScreenState extends State<ShowAlarmScreen> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Show Alarms'),
+          title: Text('Measure & Med:Show Alarms'),
           backgroundColor: Colors.greenAccent,
+          centerTitle: true,
         ),
         body: Center(
           child: Text('User not logged in'),
@@ -124,6 +132,8 @@ class _ShowAlarmScreenState extends State<ShowAlarmScreen> {
     Socket.connect(ipAddress, port).then((socket) {
       final jsonAlarms = alarms.map((alarm) => alarm.toString()).toList();
       final alarmsData = jsonAlarms.join('\n');
+
+      print(alarmsData);
 
       socket.write(alarmsData);
       socket.flush();

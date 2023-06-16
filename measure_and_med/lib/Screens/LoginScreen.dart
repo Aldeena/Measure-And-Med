@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //Seja bem-vindo
 
-                Text('Seja bem-vindo!',
+                Text('Welcome!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Esqueceu a Senha?',
+                        'Forgot Password?',
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     ],
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //sign in button
                 MyButton(
-                  text: "Cadastre-se",
+                  text: "Login now",
                   onTap: signUserIn,
                 ),
 

@@ -9,10 +9,9 @@ class NewMeasurementScreen extends StatefulWidget {
 }
 
 class _NewMeasurementScreenState extends State<NewMeasurementScreen> {
-  void _sendCommand() {
+  void _sendCommand(String command) {
     final ipAddress = '192.168.18.19';
     final port = 80;
-    final command = 'Medir';
 
     Socket.connect(ipAddress, port).then((socket) {
       socket.write(command);
@@ -29,24 +28,32 @@ class _NewMeasurementScreenState extends State<NewMeasurementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Measure & Med - Nova Medição'),
+        backgroundColor: Colors.greenAccent,
+        title: Text('Measure & Med - New Measurement'),
         centerTitle: true,
       ),
       body: Container(
         color: Colors.grey[200], // Set the background color to light gray
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Pressione para uma nova medição',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _sendCommand,
-              child: Text('Nova Medição'),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Press for a new measurement',
+                style: TextStyle(fontSize: 24),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _sendCommand('Temperatura'),
+                child: Text('Temperature'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () => _sendCommand('MAX30100'),
+                child: Text('Heart Rate/ Saturation of Oxygen'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -31,6 +31,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
           createdAt: feed['created_at'],
           entryId: feed['entry_id'].toString(),
           field1: feed['field1'].toString(),
+          field2: feed['field2'].toString(),
+          field3: feed['field3'].toString(),
         );
         entries.add(entry);
       }
@@ -62,6 +64,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
           await collectionRef.doc(querySnapshot.docs[0].id).set({
             'createdAt': entry.createdAt,
             'Temperature': entry.field1,
+            'BPM': entry.field2,
+            'SpO2': entry.field3,
             'email': email,
           });
           print('Vitals updated successfully!');
@@ -74,6 +78,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
       final measurement = Measurement(
         createdAt: entry.createdAt,
         temperature: entry.field1,
+        bpm: entry.field2,
+        spo2: entry.field3,
         email: email!,
       );
 
@@ -103,7 +109,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.greenAccent,
-        title: Text('Measure & Med - Medições'),
+        title: Text('Measure & Med - Measurements'),
         centerTitle: true,
         actions: [
           // IconButton(
@@ -128,7 +134,9 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Created At: ${entry.createdAt}'),
-                        Text('Temperatura(ºC): ${entry.field1}'),
+                        Text('Temperature(ºC): ${entry.field1}'),
+                        Text('BPM: ${entry.field2}'),
+                        Text('SpO2(%): ${entry.field3}'),
                       ],
                     ),
                   );
@@ -154,22 +162,30 @@ class Entry {
   final String createdAt;
   final String entryId;
   final String field1;
+  final String field2;
+  final String field3;
 
   Entry({
     required this.createdAt,
     required this.entryId,
     required this.field1,
+    required this.field2,
+    required this.field3,
   });
 }
 
 class Measurement {
   final String createdAt;
   final String temperature;
+  final String bpm;
+  final String spo2;
   final String email;
 
   Measurement({
     required this.createdAt,
     required this.temperature,
+    required this.bpm,
+    required this.spo2,
     required this.email,
   });
 
@@ -177,6 +193,8 @@ class Measurement {
     return {
       'createdAt': createdAt,
       'Temperature': temperature,
+      'BPM': bpm,
+      'SpO2': spo2,
       'email': email,
     };
   }

@@ -3,12 +3,13 @@ import 'package:measure_and_med/Screens/NewMeasurementScreen.dart';
 
 import 'package:measure_and_med/Screens/SetOrShowAlarmScreen.dart';
 
-class AlarmScreen extends StatelessWidget {
+class DeviceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Measure & Med - Alarmes'),
+        backgroundColor: Colors.greenAccent,
+        title: const Text('Measure & Med - Device'),
         centerTitle: true,
       ),
       body: Center(
@@ -24,7 +25,7 @@ class AlarmScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Nova Medição'),
+              child: Text('New Measurement'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -35,7 +36,7 @@ class AlarmScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Configure Alarms'),
+              child: Text('Alarms'),
             ),
           ],
         ),

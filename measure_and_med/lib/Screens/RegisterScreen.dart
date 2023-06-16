@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             double.parse(weightController.text));
       } else {
         //Senhas nao combinam
-        showErrorMessage("Senhas são diferentes!");
+        showErrorMessage("Different passwords!");
       }
 
       //Removendo circulo de carregamento
@@ -118,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 //Seja bem-vindo
 
-                Text('Crie uma conta!',
+                Text('Create an account!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //First name textfield
                 MyTextField(
                   controller: firstNameController,
-                  hintText: 'Primeiro nome',
+                  hintText: 'First name',
                   obscureText: false,
                 ),
 
@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //Last name textfield
                 MyTextField(
                   controller: lastNameController,
-                  hintText: 'Ultimo nome',
+                  hintText: 'Last name',
                   obscureText: false,
                 ),
 
@@ -147,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //Age textfield
                 MyTextField(
                   controller: ageController,
-                  hintText: 'Idade',
+                  hintText: 'Age',
                   obscureText: false,
                 ),
 
@@ -156,7 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //Height textfield
                 MyTextField(
                   controller: heightController,
-                  hintText: 'Altura (cm)',
+                  hintText: 'Height (cm)',
                   obscureText: false,
                 ),
 
@@ -165,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //weight textfield
                 MyTextField(
                   controller: weightController,
-                  hintText: 'Peso (kg)',
+                  hintText: 'Weight (kg)',
                   obscureText: false,
                 ),
 
@@ -218,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 //sign in button
                 MyButton(
-                  text: "Registre-se",
+                  text: "Register",
                   onTap: signUserUp,
                 ),
 
@@ -228,14 +228,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Já possui conta?',
+                      'Already an account?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Conecte agora',
+                        'Connect now!',
                         style: TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,

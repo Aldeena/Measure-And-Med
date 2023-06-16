@@ -12,6 +12,8 @@ class SetAlarmScreen extends StatefulWidget {
 class _SetAlarmScreenState extends State<SetAlarmScreen> {
   TextEditingController _hoursController = TextEditingController();
   TextEditingController _minutesController = TextEditingController();
+  TextEditingController _medicineController =
+      TextEditingController(); // New controller for medicine field
   int _selectedFrequency = 0;
   int _selectedStorage = 0;
 
@@ -43,7 +45,9 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
           'hours': formattedHour,
           'minutes': formattedMinute,
           'frequency': newAlarm.frequency,
-          'storage': _selectedStorage + 1, // Add the selected storage value
+          'storage': _selectedStorage + 1,
+          'medicine':
+              _medicineController.text, // Save the value of medicine field
           'email': email,
         });
       }
@@ -63,6 +67,7 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
   void dispose() {
     _hoursController.dispose();
     _minutesController.dispose();
+    _medicineController.dispose(); // Dispose the medicine field controller
     super.dispose();
   }
 
@@ -70,14 +75,30 @@ class _SetAlarmScreenState extends State<SetAlarmScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Measure & Med'),
+        title: Text('Measure & Med - Set Alarm'),
         backgroundColor: Colors.greenAccent,
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Set Alarm : 24 hour format (HH:MM)'),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // New row for medicine field
+                Text('Medicine: '),
+                SizedBox(
+                  width: 150,
+                  child: TextField(
+                    controller: _medicineController,
+                    keyboardType: TextInputType.text,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
